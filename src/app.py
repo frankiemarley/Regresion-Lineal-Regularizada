@@ -237,3 +237,20 @@ cv_scores = cross_val_score(model, X, y, cv=5, scoring='r2')
 print(f"Cross-validation R2 scores: {cv_scores}")
 print(f"Mean R2 score: {cv_scores.mean():.4f} (+/- {cv_scores.std() * 2:.4f})")
 
+alpha_values = np.linspace(0.1, 20, 50)  # Example range of alpha values
+r2_scores = []
+
+for alpha in alpha_values:
+    lasso_model = Lasso(alpha=alpha, max_iter=300)
+    lasso_model.fit(X_train, y_train)
+    y_pred = lasso_model.predict(X_test)
+    r2 = r2_score(y_test, y_pred)
+    r2_scores.append(r2)
+
+plt.figure(figsize=(10, 6))
+plt.plot(alpha_values, r2_scores, marker='o')
+plt.xlabel('Alpha')
+plt.ylabel('R-squared')
+plt.title('R-squared vs. Alpha for Lasso Regression')
+plt.grid(True)
+plt.show()
